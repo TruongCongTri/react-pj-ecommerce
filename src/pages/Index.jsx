@@ -6,12 +6,10 @@ import Dashboard from "./admin/AdminHome";
 import DashboardCategories from "./admin/categories/DashboardCategories";
 import ReadCategory from "./admin/categories/ReadCategory";
 import CreateCategory from "./admin/categories/CreateCategory";
-import UpdateCategory from "./admin/categories/UpdateCategory";
 
 import DashboardProducts from "./admin/products/DashboardProducts";
 import ReadProduct from "./admin/products/ReadProduct";
 import CreateProduct from "./admin/products/CreateProduct";
-import UpdateProduct from "./admin/products/UpdateProduct";
 
 import OrdersDashboard from "./admin/orders/OrdersDashboard";
 

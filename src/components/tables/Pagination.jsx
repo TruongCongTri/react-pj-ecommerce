@@ -3,10 +3,10 @@ import React from 'react'
 export default function Pagination() {
   return (
     <nav
-        className="flex items-center justify-between px-6"
+        className="py-[18px] px-[22px] flex items-center justify-between px-6"
         aria-label="Table navigation"
       >
-        <span className="py-5 text-sm font-medium text-neutral-500 block w-full">
+        <span className="text-sm font-medium text-neutral-500 block w-full">
           Showing <span className="">1-10</span> from{" "}
           <span className="">1000</span>
         </span>

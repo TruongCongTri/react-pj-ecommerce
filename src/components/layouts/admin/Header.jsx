@@ -17,7 +17,7 @@ export default function Header() {
       id: 1,
       name: "Manager",
     },
-    avatar: 'https://mantisdashboard.io/free/assets/avatar-1-B0hIH1z9.png',
+    avatar: 'https://avatars.githubusercontent.com/u/44316735?s=400&u=668dbc3f1c65da37ed877724d0b6007ee4b5b3b5&v=4',
     status: {
       id: 1,
       name: 'Active',
