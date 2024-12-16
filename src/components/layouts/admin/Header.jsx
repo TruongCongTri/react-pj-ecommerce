@@ -67,7 +67,7 @@ export default function Header() {
   ];
 
   return (
-    <div className="min-h-[72px] max-h-[72px] border-b-[1px] flex justify-between items-center px-6 py-4 bg-white">
+    <div className="min-h-[72px] max-h-[72px] border-b-[1px] flex justify-between items-center px-6 py-4 bg-white sticky top-0 z-100">
       <button className="hover:text-gray-500">
         <HeaderIcon item={<HiMiniBars3 />} styling={' size-6 '} />
       </button>

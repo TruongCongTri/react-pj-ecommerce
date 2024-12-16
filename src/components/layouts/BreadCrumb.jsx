@@ -28,9 +28,9 @@ export default function BreadCrumb() {
     <>
       {breadcrumbs.map(({ breadcrumb, match }, index) =>
         `${match.pathname}` === current ? (
-          <div className="font-medium text-2xl text-neutral-700 mb-2" key={index}>{breadcrumb}</div>
+          <div key={index} className="font-medium text-2xl text-neutral-700 mb-2">{breadcrumb}</div>
         ) : (
-          <></>
+          null
         )
       )}
       <nav className="flex" aria-label="Breadcrumb">

@@ -6,6 +6,7 @@ import Dashboard from "./admin/AdminHome";
 import DashboardCategories from "./admin/categories/DashboardCategories";
 import ReadCategory from "./admin/categories/ReadCategory";
 import CreateCategory from "./admin/categories/CreateCategory";
+import EditCategory from "./admin/categories/EditCategory";
 
 import DashboardProducts from "./admin/products/DashboardProducts";
 import ReadProduct from "./admin/products/ReadProduct";
@@ -36,6 +37,7 @@ export default function Index() {
           <Route index element={<DashboardCategories />} breadcrumb="Categories" />
           <Route path="add" element={<CreateCategory />} />
           <Route path=":id" element={<ReadCategory />} />
+          <Route path=":id/edit" element={<EditCategory />} />
           
         </Route>
 

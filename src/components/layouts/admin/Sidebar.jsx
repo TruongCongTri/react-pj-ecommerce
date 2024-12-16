@@ -97,7 +97,7 @@ export default function Sidebar() {
   return (
     <div
       className="min-w-[264px] max-w-[264px] h-[100vh] px-[20px] 
-      bg-white border-r-[1px] border-neutral-50"
+      bg-white border-r-[1px] border-neutral-50 flex flex-col z-100 sticky top-0"
     >
       <div className="py-[15px]">
         <div className="flex items-center gap-x-3 w-full min-h-[49px] max-h-[49px] ">
@@ -107,7 +107,7 @@ export default function Sidebar() {
       </div>
 
       {/* nav icon */}
-      <div className="py-[24px] flex flex-col justify-between ">
+      <div className="py-[24px] flex flex-col justify-between h-full">
         <div className="pb-[24px]">
           {listNavigator.map((item) => {
             return item.isGroup ? (

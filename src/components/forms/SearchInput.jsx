@@ -17,11 +17,15 @@ export default function SearchInput({ ...props }) {
         }
         <input
           type="text"
-          value={value}
-          onChange={handleChange}
+          value={props.query}
+          onChange={() => {
+            props.handleChange();
+          }}
           placeholder={props.placeholder}
           name={props.name}
           className={`text-neutral-400 font-normal text-sm placeholder:text-neutral-400 w-full focus:outline-none`}
+
+
         />
       </div>
 

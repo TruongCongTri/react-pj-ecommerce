@@ -1,6 +1,11 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import ReactPaginate from 'react-paginate';
+
+import apis from "../../apis/categories";
 
 export default function Pagination() {
+  
+
   return (
     <nav
         className="py-[18px] px-[22px] flex items-center justify-between px-6"

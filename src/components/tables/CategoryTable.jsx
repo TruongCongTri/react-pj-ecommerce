@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 
 import HeaderIcon from "../icons/HeaderIcon";
-import Pagination from "../tables/Pagination";
+import Pagination from "./Pagination";
+import PaginatedItems from "./PaginatedItems";
 import Logo from "../../assets/image/dashboard-logo.svg";
 
 import LoadingTable from "./LoadingTable";
@@ -13,7 +14,7 @@ import { HiOutlineEye } from "react-icons/hi2";
 import { HiOutlinePencil } from "react-icons/hi2";
 import { HiMiniTrash } from "react-icons/hi2";
 
-export default function NormalTable({ data, loading }) {
+export default function CategoryTable({ data, loading }) {
   const columns = [
     { Header: "Category", accessor: "name" },
     { Header: "Sales", accessor: "sales" },
@@ -186,7 +187,9 @@ export default function NormalTable({ data, loading }) {
           </tbody>
         )}
       </table>
+      
       <Pagination></Pagination>
+
     </div>
   );
 }

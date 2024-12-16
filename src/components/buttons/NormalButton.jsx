@@ -13,6 +13,7 @@ export default function NormalButton({ ...props }) {
       className={`flex justify-center items-center rounded-lg py-[10px] px-[14px] font-semibold text-sm 
       ${props.color} ${props.text} ${props.border}`}
       type={props.type}
+      disabled={props.isDisabled}
     >
       {/* text displayed on the button */}
       {props.icon ? (

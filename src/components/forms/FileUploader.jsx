@@ -1,24 +1,38 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HeaderIcon from "../icons/HeaderIcon.jsx";
 
 export default function FileUploader({ ...props }) {
-  const [value, setValue] = useState("");
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  // const [image, setImage] = useState("");
+
+  // const handleChangeImage = (event) => {
+  //   setImage(event.target.value);
+  // };
+
+
+
   //
+  const [value, setValue] = useState("");
+    const handleChange = (event) => {
+      setValue(event.target.value);
+      props.updated(event.target.value);
+    };
+    useEffect(() => {
+      setValue(props.value);
+    }, [props.value]);
   return (
     <div
       className={`rounded-lg p-6 ${props.size} ${props.color} ${props.border} ${props.text} `}
     >
       <div className="w-full ">
         {props.children ? (
-          <label htmlFor={props.id} className="">{props.children}</label>
+          <label htmlFor={props.id} className="pb-[14px]">
+            {props.children}
+          </label>
         ) : (
-          <></>
+          null
         )}
-        <div className="pt-[14px]">
+        <div className="">
           <div>
             {props.label ? (
               <label htmlFor={props.id} className={props.labelText}>
@@ -41,8 +55,13 @@ export default function FileUploader({ ...props }) {
             name={props.name}
             rows="8"
             className={`text-neutral-400 font-normal text-sm p-3 ${props.placeholderText} bg-[#F9F9FC] w-full h-full mt-1 focus:outline-none text-wrap`}
+            
+          disabled={props.isDisabled ? 'disabled' : null}
           />
           {/* </div> */}
+          {value ? (
+            <img src={value} alt="" className="w-full h-[250px] object-cover" />
+          ) : null}
         </div>
       </div>
 

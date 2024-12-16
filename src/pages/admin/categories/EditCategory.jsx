@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { HiMiniXMark } from "react-icons/hi2";
 import { HiMiniWrenchScrewdriver } from "react-icons/hi2";
 
 import BreadCrumb from "../../../components/layouts/BreadCrumb";
 import NormalButton from "../../../components/buttons/NormalButton";
 
-import LoadingTable from "../../../components/tables/LoadingTable"
 import apis from "../../../apis";
 
 import FileUploader from "../../../components/forms/FileUploader";
 import NormalInput from "../../../components/forms/NormalInput";
 import NormalTextarea from "../../../components/forms/NormalTextarea";
 
-export default function ReadCategory() {
-  // Lưu lại danh sách categories từ server
+export default function EditCategory() {
   const [singleData, setSingleData] = useState([]);
-  // Dùng để set state loading của table (first load hoặc searching)
   const [loadingGet, setLoadingGet] = useState(false);
 
-  const params = useParams();
-  const navigate = useNavigate();
-  const handleEditCate = () => {
-    // Xử lý đăng nhập thành công
-    navigate(`/admin/categories/${params.id}/edit`);
-  };
+  const [idData, setIdData] = useState();
+  const [formData, setformData] = useState({});
+  const [loadingCreate, setLoadingCreate] = useState(false);
 
+  let navigate = useNavigate();
   useEffect(() => {
     setLoadingGet(true);
     apis.categories
@@ -47,8 +43,45 @@ export default function ReadCategory() {
       });
     return () => {};
   }, []);
-  console.log(singleData);
-  
+
+  const params = useParams();
+  useEffect(() => {
+    setIdData(params.id);
+  }, []);
+
+  const submit = () => {
+    apis.categories
+      .update(idData, formData)
+      .then(
+        (res) => {
+          // thành công
+          navigate("/admin/categories");
+        },
+        (err) => {
+          console.log(err);
+        }
+      )
+      .finally(() => {
+        setLoadingCreate(false);
+      });
+  };
+
+  /**
+   * Description
+   *
+   * Nhận vào một chuỗi là đường dẫn ảnh và update vào 'formData'
+   *
+   * @param {string} img
+   * @returns {void}
+   */
+
+  const handleEditCate = () => {
+    submit();
+  };
+  const handleCancel = () => {
+    navigate("/admin/categories");
+  };
+
   return (
     <div className="mx-6 my-8 ">
       <div className="flex justify-between mb-6">
@@ -56,6 +89,17 @@ export default function ReadCategory() {
           <BreadCrumb />
         </div>
         <div className="flex gap-x-4 items-end ">
+          <NormalButton
+            color="bg-[#F9F9FC]"
+            text="text-neutral-400 font-semibold text-sm"
+            type="submit"
+            icon={<HiMiniXMark />}
+            iconStyle="size-5 "
+            onClick={handleCancel}
+            border="border border-neutral-400"
+          >
+            Cancel
+          </NormalButton>
           <NormalButton
             color="bg-[#5C59E8]"
             text="text-white"
@@ -82,8 +126,13 @@ export default function ReadCategory() {
               label="Photo"
               type="text"
               placeholder="Drag and drop image here, or click add image"
-              isDisabled="true"
               value={singleData.image}
+              updated={(_value) => {
+                setformData({
+                  ...formData,
+                  image: _value,
+                });
+              }}
             >
               Thumbnail
             </FileUploader>
@@ -101,9 +150,14 @@ export default function ReadCategory() {
                     value={singleData.name}
                     type="text"
                     name={`CategoryName`}
-                    isDisabled="true"
+                    updated={(_value) => {
+                      setformData({
+                        ...formData,
+                        name: _value,
+                      });
+                    }}
                   >
-                    Category Name 
+                    Category Name
                   </NormalInput>
                 </div>
                 <div>
@@ -113,7 +167,12 @@ export default function ReadCategory() {
                     type="text"
                     value={singleData.description}
                     name={`CategoryDesc`}
-                    isDisabled="true"
+                    updated={(_value) => {
+                      setformData({
+                        ...formData,
+                        description: _value,
+                      });
+                    }}
                   >
                     Description
                   </NormalTextarea>

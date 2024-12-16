@@ -1,27 +1,31 @@
 import axios from "axios";
+const { VITE_API_URL } = import.meta.env;
 
 const categories = {
-    getData(currentPage, valuesPerPage) {
-        return axios({
-            method: 'get',
-            url: '{{base_url}}/api/admin/categories',
-            params: {
-                page: currentPage,
-                per_page: valuesPerPage
-            }
-        });
-    }, 
-
-    // getData(currentPage, valuesPerPage) {axios.get('{{base_url}}/api/admin/categories', { params: { page: currentPage, per_page: valuesPerPage} })}
-    
-
+    // getData(currentPage, valuesPerPage) {
+	// 	return axios({
+	// 		method: 'get',
+	// 		url: `${VITE_API_URL}/api/admin/categories`,
+	// 		params: {
+	// 			page: currentPage,
+	// 			per_page: valuesPerPage,
+	// 		},
+	// 	});
+	// },
+    getData() {
+		return axios({
+			method: 'get',
+			url: `${VITE_API_URL}/api/admin/categories`,
+		});
+	},
     //path
     getSingleData(id) {
         return axios({
             method: 'get',
-            url: `{{base_url}}/api/admin/categories/${id}`,
+            url: `${VITE_API_URL}/api/admin/categories/${id}`,
         });
     },
+    
     //create new data
     // body
     postSingleData() {
@@ -37,6 +41,12 @@ const categories = {
           });
     },
 
+    create(body = {}) {
+		return axios.post(`${VITE_API_URL}/api/admin/categories`, body);
+	},
+    update(id, body = {}) {
+		return axios.post(`${VITE_API_URL}/api/admin/categories/${id}`, body);
+	},
     //update a data 
     //path
     putSingleData(id) {
