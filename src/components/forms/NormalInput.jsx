@@ -30,7 +30,9 @@ export default function NormalInput({ ...props }) {
         placeholder={props.placeholder}
         name={props.name}
         disabled={props.isDisabled ? 'disabled' : null}
-        className={`${props.size} h-10 mt-1 rounded-lg bg-[#F9F9FC] border border-neutral-100 text-neutral-400 font-normal text-sm px-3 py-2 placeholder:text-neutral-400 focus:outline-none`}
+        min={props.min}
+        max={props.max}
+        className={`${props.size} h-10 mt-1 rounded-lg bg-[#F9F9FC] border border-neutral-100 text-neutral-600 font-normal text-sm px-3 py-2 placeholder:text-neutral-400 focus:outline-none`}
       />
       {/* {props.error && <div className="error-message">{props.error}</div>} */}
     </div>

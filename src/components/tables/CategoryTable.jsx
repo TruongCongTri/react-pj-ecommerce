@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 
 import HeaderIcon from "../icons/HeaderIcon";
@@ -34,10 +34,11 @@ export default function CategoryTable({ data, loading }) {
     // Xử lý chỉnh sửa thông tin category
     navigate(`/admin/categories/${id}/edit`);
   };
-  const handleDeleteCate = (id) => {
-    // Xử lý xóa category
-    console.log("xóa cate thành công");
-  };
+  
+  // const handleDeleteCate = (id) => {
+  //   // Xử lý xóa category
+  //   console.log("xóa cate thành công");
+  // };
 
   return (
     <div className="relative rounded-lg w-full text-left bg-white border border-gray-200 ">
@@ -49,24 +50,29 @@ export default function CategoryTable({ data, loading }) {
                 return (
                   <th
                     key={column.accessor}
-                    className="py-[18px] px-[22px] text-left flex justify-between max-w-[612px]"
+                    className="py-[18px] px-[22px] text-left max-w-[612px]"
                   >
-                    <div className="flex items-center gap-2">
-                      <input
-                        id="checkbox-all-search"
-                        type="checkbox"
-                        className="size-5 text-blue-600 bg-white rounded-lg focus:ring-blue-500 "
-                      />
-                      <label htmlFor="checkbox-all-search" className="sr-only">
-                        checkbox
-                      </label>
-                      <div>{column.Header}</div>
-                    </div>
+                    <div className="flex justify-between">
+                      <div className="flex items-center gap-2">
+                        <input
+                          id="checkbox-all-search"
+                          type="checkbox"
+                          className="size-5 text-blue-600 bg-white rounded-lg focus:ring-blue-500 "
+                        />
+                        <label
+                          htmlFor="checkbox-all-search"
+                          className="sr-only"
+                        >
+                          checkbox
+                        </label>
+                        <div>{column.Header}</div>
+                      </div>
 
-                    <HeaderIcon
-                      item={<HiChevronDown />}
-                      styling={"ml-2 size-4 "}
-                    />
+                      <HeaderIcon
+                        item={<HiChevronDown />}
+                        styling={"ml-2 size-4 "}
+                      />
+                    </div>
                   </th>
                 );
               }
@@ -77,10 +83,12 @@ export default function CategoryTable({ data, loading }) {
                 >
                   <div className="flex justify-between">
                     {column.Header}
-                    <HeaderIcon
-                      item={<HiChevronDown />}
-                      styling={"ml-2 size-4 "}
-                    />
+                    {column.Header !== "Action" ? (
+                      <HeaderIcon
+                        item={<HiChevronDown />}
+                        styling={"ml-2 size-4 "}
+                      />
+                    ) : null}
                   </div>
                 </th>
               );
@@ -96,11 +104,8 @@ export default function CategoryTable({ data, loading }) {
                 key={rowIndex}
                 name={rowIndex}
                 className="cursor-pointer bg-white border-b border-neutral-50 hover:bg-gray-50 font-medium text-sm text-neutral-500"
-                onClick={() => {
-                  handleViewCate(row.id);
-                }}
               >
-                <td className="py-[18px] px-[22px] text-left flex max-w-[612px] ">
+                <td className="py-[18px] px-[22px] text-left max-w-[612px] ">
                   <div className="flex items-center gap-2">
                     <input
                       id="checkbox-all-search"
@@ -122,7 +127,7 @@ export default function CategoryTable({ data, loading }) {
                     <div className="flex items-center gap-2 w-3/4">
                       <div className="flex items-center">
                         <div className="ps-3">
-                          <div className="text-neutral-700">{row.name}</div>
+                          <Link to={`/admin/categories/${row.id}`} className="text-neutral-700">{row.name}</Link>
                           <div className="font-normal text-xs text-wrap">
                             {row.description}
                           </div>
@@ -132,24 +137,24 @@ export default function CategoryTable({ data, loading }) {
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3">
+                  <div className="">
                     <div className="text-neutral-700">15,020</div>
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3">
+                  <div className="">
                     <div className="text-neutral-700">901</div>
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3">
+                  <div className="">
                     <div className="text-neutral-700">
                       {dateFormat(row.createdAt, "dd mmm yyyy")}
                     </div>
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3 flex justify-center items-center">
+                  <div className="flex justify-center items-center">
                     <div
                       onClick={() => {
                         handleViewCate(row.id);
@@ -170,7 +175,7 @@ export default function CategoryTable({ data, loading }) {
                         styling={"ml-2 size-4 "}
                       />
                     </div>
-                    <div
+                    {/* <div
                       onClick={() => {
                         handleDeleteCate(row.id);
                       }}
@@ -179,7 +184,7 @@ export default function CategoryTable({ data, loading }) {
                         item={<HiMiniTrash />}
                         styling={"ml-2 size-4 "}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </td>
               </tr>
@@ -187,9 +192,8 @@ export default function CategoryTable({ data, loading }) {
           </tbody>
         )}
       </table>
-      
-      <Pagination></Pagination>
 
+      <Pagination></Pagination>
     </div>
   );
 }

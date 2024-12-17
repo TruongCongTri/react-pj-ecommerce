@@ -15,10 +15,7 @@ const products = {
 
     //path
     getSingleData(id) {
-        return axios({
-            method: 'get',
-            url: `${VITE_API_URL}/api/admin/products/${id}`,
-        });
+        return axios.get(`${VITE_API_URL}/api/admin/products/${id}`);
     },
     
     //create new data
@@ -26,7 +23,9 @@ const products = {
     create(body = {}) {
 		return axios.post(`${VITE_API_URL}/api/admin/products`, body);
 	},
-    
+    update(id, body = {}) {
+		return axios.post(`${VITE_API_URL}/api/admin/products/${id}`, body);
+	},
     //update a data 
     //path
     putSingleData(id) {
@@ -37,11 +36,8 @@ const products = {
     },
 
     //path
-    deleteSingleData(id) {
-        return axios({
-            method: 'delete',
-            url: `{{base_url}}/api/admin/products/${id}`,
-        });
+    delete(id) {
+        return axios.delete(`${VITE_API_URL}/api/admin/products/${id}`);
     }
 }
 

@@ -7,6 +7,8 @@ import SearchInput from "../../../components/forms/SearchInput";
 import CategoryTable from "../../../components/tables/CategoryTable";
 
 // import { HiMiniArrowLeftStartOnRectangle } from "react-icons/hi2";
+
+import HeaderIcon from "../../../components/icons/HeaderIcon";
 import { PiExportBold } from "react-icons/pi";
 import { HiMiniPlus } from "react-icons/hi2";
 
@@ -19,12 +21,11 @@ export default function CategoriesDashboard() {
   const [listData, setListData] = useState([]);
   // Dùng để set state loading của table (first load hoặc searching)
   const [loadingGet, setLoadingGet] = useState(false);
-  // Dùng để lấy search
-  const [query, setQuery] = useState("");
-  const [filteredDatas, setFilterDatas] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   const navigate = useNavigate();
-
   const handleAddCate = () => {
     // Xử lý đăng nhập thành công
     navigate("/admin/categories/add");
@@ -33,6 +34,7 @@ export default function CategoriesDashboard() {
     console.log("export cate");
   };
 
+  // call api get list cate data
   useEffect(() => {
     setLoadingGet(true);
     apis.categories
@@ -55,23 +57,17 @@ export default function CategoriesDashboard() {
     return () => {};
   }, []);
 
-  // search handling
-  const handleChange = (event) => {
-    setQuery(event.target.value);
-  };
   useEffect(() => {
-    let filtered = listData;
-    if (query !== " ") {
-      filtered = listData.filter(
-        (cate) =>
-          cate.name
-            .trim()
-            .toLowerCase()
-            .includes(query.trim().toLowerCase())
-      );
-    } 
-    setFilterDatas(filtered);
-  }, [query]);
+    const filtered = listData;
+    setFilteredData(filtered);
+  }, [listData]);
+
+  useEffect(() => {
+    const filtered = listData.filter((o) =>
+      o.name.trim().toLowerCase().includes(searchQuery.trim().toLowerCase())
+    );
+    setFilteredData(filtered);
+  }, [searchQuery]);
 
   return (
     <div className="mx-6 my-8 ">
@@ -104,15 +100,36 @@ export default function CategoriesDashboard() {
       </div>
 
       <div className="flex justify-between mb-6">
-        <SearchInput
+        {/* <SearchInput
           size="min-w-[320px] max-w-[320px] "
           icon={<HiMiniMagnifyingGlass />}
           placeholder="Search category. . ."
           name="categorySearch"
-          onChange={handleChange}
-          value={query}
-          required
-        ></SearchInput>
+          data={listData}
+          updatedData={(_value) => {
+            setFilteredData(_value);
+           }}
+        /> */}
+        <div
+          className={`flex items-center rounded-lg min-h-10 max-h-10 min-w-[320px] max-w-[320px] bg-white border`}
+        >
+          <div className="flex w-full px-3 py-2">
+            {/* {props.label ? <label htmlFor={props.id}>{props.label}</label> : <></>}  */}
+
+            <HeaderIcon
+              item={<HiMiniMagnifyingGlass />}
+              styling={`mr-1 size-5 text-neutral-500`}
+            />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search category. . ."
+              name="categorySearch"
+              className={`text-neutral-400 font-normal text-sm placeholder:text-neutral-400 w-full focus:outline-none`}
+            />
+          </div>
+        </div>
 
         <NormalButton
           color="bg-white"
@@ -127,7 +144,7 @@ export default function CategoriesDashboard() {
         </NormalButton>
       </div>
       <div>
-        <CategoryTable data={filteredDatas} loading={loadingGet}></CategoryTable>
+        <CategoryTable data={filteredData} loading={loadingGet}></CategoryTable>
       </div>
       <div></div>
     </div>

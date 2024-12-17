@@ -1,4 +1,7 @@
 import React, { useState, useMemo } from "react";
+
+import dateFormat from "dateformat";
+
 import HeaderIcon from "../icons/HeaderIcon";
 import Logo from "../../assets/image/dashboard-logo.svg";
 import { HiChevronDown } from "react-icons/hi2";
@@ -7,17 +10,18 @@ import { HiOutlinePencil } from "react-icons/hi2";
 import { HiMiniTrash } from "react-icons/hi2";
 
 import LoadingTable from "./LoadingTable";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProductStatusIcon from "../icons/ProductStatusIcon";
 
 import Pagination from "../pagination/Pagination";
 
-let PageSize = 10;
+import apis from "../../apis";
+let PageSize = 15;
 
 export default function ProductTable({ data, loading }) {
   const columns = [
     { Header: "Product", accessor: "name" },
-    { Header: "SKU", accessor: "sku" },
+    // { Header: "SKU", accessor: "sku" },
     { Header: "Category", accessor: "category" },
     { Header: "Stock", accessor: "stock" },
     { Header: "Price", accessor: "price" },
@@ -30,12 +34,33 @@ export default function ProductTable({ data, loading }) {
   };
   const navigate = useNavigate();
   const handleViewProduct = (id) => {
-    // Xử lý đăng nhập thành công
+    // Xử lý
     navigate(`/admin/products/${id}`);
   };
   const handleEditProduct = (id) => {
-    // Xử lý đăng nhập thành công
+    // Xử lý
     navigate(`/admin/products/${id}/edit`);
+  };
+  // const handleDeleteProduct = (id) => {
+  //   // Xử lý xóa category
+  //   console.log("xóa cate thành công");
+  // };
+
+  const deleteProduct = (id) => {
+    apis.products
+      .delete(id)
+      .then(
+        (res) => {
+          // thành công
+          navigate("/admin/products");
+        },
+        (err) => {
+          console.log(err);
+        }
+      )
+      .finally(() => {
+        // setLoadingCreate(false);
+      });
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,24 +81,29 @@ export default function ProductTable({ data, loading }) {
                 return (
                   <th
                     key={column.accessor}
-                    className="py-[18px] px-[22px] text-left flex justify-between"
+                    className="py-[18px] px-[22px] text-left max-w-[250px]"
                   >
-                    <div className="flex items-center gap-2">
-                      <input
-                        id="checkbox-all-search"
-                        type="checkbox"
-                        className="size-5 text-blue-600 bg-white rounded-lg focus:ring-blue-500 "
-                      />
-                      <label htmlFor="checkbox-all-search" className="sr-only">
-                        checkbox
-                      </label>
-                      <div>{column.Header}</div>
-                    </div>
+                    <div className="flex justify-between">
+                      <div className="flex items-center gap-2">
+                        <input
+                          id="checkbox-all-search"
+                          type="checkbox"
+                          className="size-5 text-blue-600 bg-white rounded-lg focus:ring-blue-500 "
+                        />
+                        <label
+                          htmlFor="checkbox-all-search"
+                          className="sr-only"
+                        >
+                          checkbox
+                        </label>
+                        <div>{column.Header}</div>
+                      </div>
 
-                    <HeaderIcon
-                      item={<HiChevronDown />}
-                      styling={"ml-2 size-4 "}
-                    />
+                      <HeaderIcon
+                        item={<HiChevronDown />}
+                        styling={"ml-2 size-4 "}
+                      />
+                    </div>
                   </th>
                 );
               }
@@ -84,10 +114,14 @@ export default function ProductTable({ data, loading }) {
                 >
                   <div className="flex justify-between">
                     {column.Header}
-                    <HeaderIcon
-                      item={<HiChevronDown />}
-                      styling={"ml-2 size-4 "}
-                    />
+                    {column.Header !== "SKU" &&
+                    column.Header !== "Category" &&
+                    column.Header !== "Action" ? (
+                      <HeaderIcon
+                        item={<HiChevronDown />}
+                        styling={"ml-2 size-4 "}
+                      />
+                    ) : null}
                   </div>
                 </th>
               );
@@ -98,22 +132,27 @@ export default function ProductTable({ data, loading }) {
           <LoadingTable />
         ) : (
           <tbody>
-            {currentTableData.map((row, rowIndex) => (
+            {data.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
                 name={rowIndex}
                 className="cursor-pointer bg-white border-b border-neutral-50 hover:bg-gray-50 font-medium text-sm text-neutral-500"
-                onClick={() => {
-                  handleViewProduct(row.id);
-                }}
               >
-                <td className="py-[18px] px-[22px] text-left ">
+                <td className="py-[18px] px-[22px] text-left  max-w-[250px]">
                   <div className="flex items-center gap-2">
+                    <input
+                      id="checkbox-all-search"
+                      type="checkbox"
+                      className="size-5 text-blue-600 bg-white rounded-lg focus:ring-blue-500 "
+                    />
+                    <label htmlFor="checkbox-all-search" className="sr-only">
+                      checkbox
+                    </label>
                     <div className="flex items-center gap-2">
                       <div className="flex items-center">
                         <img
                           className="size-[44px] rounded-lg bg-[#E0E2E7]"
-                          src={row.image}
+                          src={row.images[0]}
                           onError={handleErrorImg}
                         />
                       </div>
@@ -121,56 +160,64 @@ export default function ProductTable({ data, loading }) {
                     <div className="flex items-center gap-2 w-1/4">
                       <div className="flex items-center">
                         <div className="ps-3">
-                          <div className="text-neutral-700">{row.name}</div>
+                          <Link
+                            to={`/admin/products/${row.id}`}
+                            className="text-neutral-700"
+                          >
+                            {row.name}
+                          </Link>
                           <div className="font-normal text-xs truncate ">
-                            {row.description}
+                            {row.description.length > 28 ? row.description.substring(0, 28) + "..."
+                              : row.description}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </td>
+                {/* <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
+                  <div className="">
+                    <div className="text-neutral-700">{row.sku}</div>
+                  </div>
+                </td> */}
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3">
-                    <div className="text-neutral-700">302012</div>
+                  <div className="">
+                    <div className="text-neutral-700">{row.category.name}</div>
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3">
-                    <div className="text-neutral-700">Bag & Pouch</div>
+                  <div className="">
+                    <div className="text-neutral-700">
+                      {row.quantity || 10}{" "}
+                    </div>
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3">
-                    <div className="text-neutral-700">10</div>
+                  <div className="">
+                    <div className="text-neutral-700">${row.price}</div>
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3">
-                    <div className="text-neutral-700">$121.00</div>
-                  </div>
-                </td>
-                <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3">
+                  <div className="">
                     <ProductStatusIcon item={row.status} />
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3">
-                    <div className="text-neutral-700">{row.createdAt}</div>
+                  <div className="">
+                    <div className="text-neutral-700">
+                      {dateFormat(row.createdAt, "dd mmm yyyy")}
+                    </div>
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
-                  <div className="ps-3 flex justify-center items-center">
+                  <div className="flex justify-center items-center gap-2">
                     <div
+                      className=""
                       onClick={() => {
                         handleViewProduct(row.id);
                       }}
                     >
-                      <HeaderIcon
-                        item={<HiOutlineEye />}
-                        styling={"ml-2 size-4 "}
-                      />
+                      <HeaderIcon item={<HiOutlineEye />} styling={"size-4 "} />
                     </div>
                     <div
                       onClick={() => {
@@ -179,13 +226,17 @@ export default function ProductTable({ data, loading }) {
                     >
                       <HeaderIcon
                         item={<HiOutlinePencil />}
-                        styling={"ml-2 size-4 "}
+                        styling={"size-4 "}
                       />
                     </div>
-                    <HeaderIcon
-                      item={<HiMiniTrash />}
-                      styling={"ml-2 size-4 "}
-                    />
+                    <div
+                      onClick={() => {
+                        // handleDeleteProduct(row.id);
+                        deleteProduct(row.id);
+                      }}
+                    >
+                      <HeaderIcon item={<HiMiniTrash />} styling={"size-4 "} />
+                    </div>
                   </div>
                 </td>
               </tr>

@@ -16,6 +16,7 @@ export default function CreateCategory() {
   const [formData, setformData] = useState({});
   const [loadingCreate, setLoadingCreate] = useState(false);
 
+
   let navigate = useNavigate();
   const submit = () => {
     apis.categories
@@ -42,16 +43,7 @@ export default function CreateCategory() {
    * @param {string} img
    * @returns {void}
    */
-  const handleUpdateFile = (img) => {
-    setformData({
-      ...formData,
-      image: img,
-    });
-  };
 
-  const handleAddCate = () => {
-    submit();
-  };
   const handleCancel = () => {
     navigate("/admin/categories");
   };
@@ -80,11 +72,10 @@ export default function CreateCategory() {
             color="bg-[#5C59E8]"
             text="text-white"
             border="border border-[#5C59E8]"
-            // size="min-w-[147px] max-w-[147px] min-h-10 max-h-10"
             type="submit"
             icon={<HiMiniPlus />}
             iconStyle="size-5"
-            onClick={handleAddCate}
+            onClick={submit}
           >
             Add Category
           </NormalButton>
@@ -93,7 +84,13 @@ export default function CreateCategory() {
 
       <div className="grid grid-cols-4 grid-rows-3 gap-5">
         <div className="col-span-1 row-span-2">
-          <FileUploader
+          <div className="bg-white p-6 border border-neutral-100 rounded-lg">
+            <div className="text-neutral-800 font-medium text-lg pb-[14px]">
+              Thumbnail
+            </div>
+            <div>
+              <div className="mb-3">
+                {/* <FileUploader
             color="bg-white"
             border="border border-neutral-100"
             text="text-neutral-800 font-medium text-lg"
@@ -101,8 +98,6 @@ export default function CreateCategory() {
             label="Photo"
             type="text"
             placeholder="Drag and drop image here, or click add image"
-            // updateFile={handleUpdateFile}
-
             updated={(_value) => {
               setformData({
                 ...formData,
@@ -111,7 +106,33 @@ export default function CreateCategory() {
             }}
           >
             Thumbnail
-          </FileUploader>
+          </FileUploader> */}
+                <NormalInput
+                  size="w-full"
+                  type="text"
+                  placeholder="Drag and drop image here, or click add image"
+                  name="CategoryImage"
+                  updated={(_value) => {
+                    setformData({
+                      ...formData,
+                      image: _value,
+                    });
+                  }}
+                >
+                  Photo
+                </NormalInput>
+              </div>
+              <div className="mb-3">
+                {formData.image ? (
+                  <img
+                    src={formData.image}
+                    alt=""
+                    className="w-full h-[250px] object-cover rounded-lg"
+                  />
+                ) : null}
+              </div>
+            </div>
+          </div>
         </div>
         <div className="col-span-3 row-span-2.5">
           {/* general information */}

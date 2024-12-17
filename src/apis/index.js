@@ -3,7 +3,7 @@ import products from "./products";
 
 const apis = {
   categories,
-  products
+  products,
 };
 
 export default apis;

@@ -29,7 +29,7 @@ export default function NormalTextarea({ ...props }) {
           name={props.name}
           rows={props.rows}
           disabled={props.isDisabled ? 'disabled' : null}
-          className={`${props.size}  mt-1 rounded-lg bg-[#F9F9FC] border border-neutral-100 text-neutral-400 font-normal text-sm px-3 py-2 placeholder:text-neutral-400 focus:outline-none`}
+          className={`${props.size}  mt-1 rounded-lg bg-[#F9F9FC] border border-neutral-100 text-neutral-600 font-normal text-sm px-3 py-2 placeholder:text-neutral-400 focus:outline-none`}
         />
       {/* {props.error && <div className="error-message">{props.error}</div>} */}
     </div>

@@ -11,6 +11,7 @@ import EditCategory from "./admin/categories/EditCategory";
 import DashboardProducts from "./admin/products/DashboardProducts";
 import ReadProduct from "./admin/products/ReadProduct";
 import CreateProduct from "./admin/products/CreateProduct";
+import EditProduct from "./admin/products/EditProduct";
 
 import OrdersDashboard from "./admin/orders/OrdersDashboard";
 
@@ -44,7 +45,8 @@ export default function Index() {
         <Route path="products">
           <Route index element={<DashboardProducts />} breadcrumb="Products" />
           <Route path="add" element={<CreateProduct />}  breadcrumb="Add Product" />
-          <Route path=":id" element={<ReadProduct />} />
+          <Route path=":id" element={<ReadProduct />} breadcrumb="Product Detail"/>
+          <Route path=":id/edit" element={<EditProduct />} breadcrumb="Edit Product"/>
         </Route>
 
         <Route path="orders">
