@@ -55,10 +55,11 @@ export default function EditProduct() {
   }, []);
   console.log(singleData);
 
-  // useEffect(() => {
-  //   console.log(singleData.images);
-  //   setImageArr(...singleData.images);
-  // }, []);
+  useEffect(() => {
+    console.log('set image arr');
+    console.log(singleData.images);
+    setImageArr(singleData.images);
+  }, [singleData.images]);
 
   useEffect(() => {
     setLoadingCate(true);
@@ -211,9 +212,9 @@ export default function EditProduct() {
                         </NormalInput>
                       </div>
                       <div className="mb-3 grid grid-cols-4 gap-2">
-                        {singleData.images ? (
+                        {imageArr ? (
                           <>
-                            {singleData.images.map((img) => {
+                            {imageArr.map((img) => {
                               return (
                                 <>
                                   {img ? (

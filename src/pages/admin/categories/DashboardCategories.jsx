@@ -57,6 +57,7 @@ export default function CategoriesDashboard() {
     return () => {};
   }, []);
 
+  // xử lý search categories
   useEffect(() => {
     const filtered = listData;
     setFilteredData(filtered);

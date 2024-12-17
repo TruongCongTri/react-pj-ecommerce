@@ -17,7 +17,7 @@ export default function NormalDropdown({ ...props }) {
     };
     useEffect(() => {
       setSelected(props.value);
-      props.updated(props.value.id);
+      // props.updated(props.value.id);
       }, [props.value]);
 
   return (

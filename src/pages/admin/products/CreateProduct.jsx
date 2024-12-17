@@ -182,8 +182,8 @@ export default function CreateProduct() {
                     placeholder="Drag and drop image here, or click add image"
                     name="CategoryImageOne"
                     updated={(_value) => {
+                      // setImageArr(imageArr => [...imageArr, _value])
                       setImageArr(imageArr => [...imageArr, _value])
-                      
                       setformData({
                         ...formData,
                         images: imageArr,
@@ -193,38 +193,6 @@ export default function CreateProduct() {
                     Photo
                   </NormalInput>
                 </div>
-                {/* <div className="mb-3">
-                  <NormalInput
-                    size="w-full"
-                    type="text"
-                    placeholder="Drag and drop image here, or click add image"
-                    name="CategoryImageTwo"
-                    updated={(_value) => {
-                      setformData({
-                        ...formData,
-                        images: [_value],
-                      });
-                    }}
-                  >
-                    Photo 2
-                  </NormalInput>
-                </div>
-                <div className="mb-3">
-                  <NormalInput
-                    size="w-full"
-                    type="text"
-                    placeholder="Drag and drop image here, or click add image"
-                    name="CategoryImageThree"
-                    updated={(_value) => {
-                      setformData({
-                        ...formData,
-                        images: [_value],
-                      });
-                    }}
-                  >
-                    Photo 3
-                  </NormalInput>
-                </div> */}
                 <div className="mb-3 grid grid-cols-4">
                   {imageArr ? (
                     <>

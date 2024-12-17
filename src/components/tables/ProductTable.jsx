@@ -13,10 +13,10 @@ import LoadingTable from "./LoadingTable";
 import { Link, useNavigate } from "react-router-dom";
 import ProductStatusIcon from "../icons/ProductStatusIcon";
 
-import Pagination from "../pagination/Pagination";
+// import Pagination from "../pagination/Pagination";
+// let PageSize = 15;
 
 import apis from "../../apis";
-let PageSize = 15;
 
 export default function ProductTable({ data, loading }) {
   const columns = [
@@ -41,10 +41,6 @@ export default function ProductTable({ data, loading }) {
     // Xử lý
     navigate(`/admin/products/${id}/edit`);
   };
-  // const handleDeleteProduct = (id) => {
-  //   // Xử lý xóa category
-  //   console.log("xóa cate thành công");
-  // };
 
   const deleteProduct = (id) => {
     apis.products
@@ -63,13 +59,13 @@ export default function ProductTable({ data, loading }) {
       });
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
 
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  // const currentTableData = useMemo(() => {
+  //   const firstPageIndex = (currentPage - 1) * PageSize;
+  //   const lastPageIndex = firstPageIndex + PageSize;
+  //   return data.slice(firstPageIndex, lastPageIndex);
+  // }, [currentPage]);
 
   return (
     <div className="relative rounded-lg w-full text-left bg-white border border-gray-200 ">
@@ -167,7 +163,8 @@ export default function ProductTable({ data, loading }) {
                             {row.name}
                           </Link>
                           <div className="font-normal text-xs truncate ">
-                            {row.description.length > 28 ? row.description.substring(0, 28) + "..."
+                            {row.description.length > 28
+                              ? row.description.substring(0, 28) + "..."
                               : row.description}
                           </div>
                         </div>
@@ -244,7 +241,7 @@ export default function ProductTable({ data, loading }) {
           </tbody>
         )}
       </table>
-      <nav
+      {/* <nav
         className="py-[18px] px-[22px] flex items-center justify-between px-6"
         aria-label="Table navigation"
       >
@@ -255,7 +252,7 @@ export default function ProductTable({ data, loading }) {
           pageSize={PageSize}
           onPageChange={(page) => setCurrentPage(page)}
         />
-      </nav>
+      </nav> */}
     </div>
   );
 }
