@@ -75,8 +75,8 @@ export default function ReadProduct() {
         {loadingGet ? (
           <div>Loading data</div>
         ) : (
-          <div className="grid grid-cols-4 grid-rows-3 gap-5">
-            <div className="col-span-3 row-span-2.5">
+          <div className="grid grid-cols-4 gap-5">
+            <div className="col-span-3 ">
               {/* general information */}
               <div className="bg-white p-6 border border-neutral-100 rounded-lg mb-6">
                 <div className="text-neutral-800 font-medium text-lg pb-[14px]">
@@ -192,7 +192,7 @@ export default function ReadProduct() {
             </div>
 
             {/* category */}
-            <div className="col-span-1 row-span-2">
+            <div className="col-span-1 ">
               <div className="bg-white p-6 border border-neutral-100 rounded-lg mb-6">
                 <div className="text-neutral-800 font-medium text-lg pb-[14px]">
                   Category
@@ -212,19 +212,20 @@ export default function ReadProduct() {
                 </div>
               </div>
 
+              {/* status */}
               {/* <div className="bg-white p-6 border border-neutral-100 rounded-lg mb-6">
                 <div className="flex justify-between">
                   <div className="text-neutral-800 font-medium text-lg pb-[14px]">
                     Status
                   </div>
-                  <ProductStatus status={singleData.status.id} />
+                  <ProductStatus status={singleData.status} />
                 </div>
                 <div>
                   <div className="mb-3">
                     <NormalInput
                       size="w-full"
                       type="text"
-                      value={singleData.category.name}
+                      value={singleData.status}
                       name={`ProductStatus`}
                       isDisabled="true"
                     >

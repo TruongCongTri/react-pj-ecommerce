@@ -3,9 +3,9 @@ import { IconContext } from "react-icons";
 
 import { HiOutlineQuestionMarkCircle } from "react-icons/hi2";
 
-export default function FileIcon({ item = {}, styling = {} }) {
+export default function HeaderIcon({ item = {}, styling = {} }) {
   return (
-    <IconContext.Provider value={{ className: `${styling}` }}>
+    <IconContext.Provider value={{ className:  `${styling}` }}>
       {item || <HiOutlineQuestionMarkCircle />}
     </IconContext.Provider>
   );

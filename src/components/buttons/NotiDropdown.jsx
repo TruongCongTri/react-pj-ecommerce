@@ -2,8 +2,8 @@ import React, { useContext } from 'react'
 
 import { NotiContext } from '../../contexts/NotiContext';
 
-export default function NotiDropdown() {
-    const { isOpen, setIsOpen } = useContext(NotiContext);
+export default function NotiDropdown({ item = {} }) {
+    const { isOpen } = useContext(NotiContext);
     const listNoti = [
         {
             id: 1,
@@ -27,10 +27,10 @@ export default function NotiDropdown() {
   return (
     <div 
       className={`absolute min-w-[320px] max-w-[320px] max-h-[350px] 
-      right-0 top-[64px] z-[1000] py-4  
+      right-0 top-[64px] z-100 py-4  
       rounded-lg overflow-y-scroll block shadow-lg bg-white
         ${
-          isOpen
+          isOpen === `${item.name}` 
             ? " "
             : " hidden"
         }`}

@@ -1,13 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
-
-import { SnackBarContext } from '../../contexts/SnackBarContext';
 
 import HeaderIcon from "../icons/HeaderIcon";
 import Logo from "../../assets/image/dashboard-logo.svg";
 
 import LoadingTable from "./LoadingTable";
+import CustomerStatusIcon from "../icons/CustomerStatusIcon";
 
 import { HiChevronDown } from "react-icons/hi2";
 import { HiOutlineEye } from "react-icons/hi2";
@@ -15,13 +14,12 @@ import { HiOutlinePencil } from "react-icons/hi2";
 import { HiMiniTrash } from "react-icons/hi2";
 
 export default function CategoryTable({ data, loading }) {
-
-  const {addSnack} = useContext(SnackBarContext);
-
   const columns = [
-    { Header: "Category", accessor: "name" },
-    { Header: "Sales", accessor: "sales" },
-    { Header: "Stock", accessor: "stock" },
+    { Header: "Customer Name", accessor: "name" },
+    { Header: "Phone", accessor: "phone" },
+    { Header: "Orders", accessor: "orders" },
+    { Header: "Balance", accessor: "balance" },
+    { Header: "Status", accessor: "status" },
     { Header: "Added", accessor: "createdAt" },
     { Header: "Action", accessor: "action" },
   ];
@@ -29,22 +27,23 @@ export default function CategoryTable({ data, loading }) {
     e.target.src = Logo;
   };
   const navigate = useNavigate();
-  const handleViewCate = (id) => {
-    // Xử lý xem chi tiết category
-    navigate(`/admin/categories/${id}`);
+  const handleViewCustomer = (id) => {
+    // Xử lý xem chi tiết Customer
+    navigate(`/admin/customers/${id}`);
   };
-  const handleEditCate = (id) => {
-    // Xử lý chỉnh sửa thông tin category
-    navigate(`/admin/categories/${id}/edit`);
+  const handleEditCustomer = (id) => {
+    // Xử lý chỉnh sửa thông tin customer
+    navigate(`/admin/customers/${id}/edit`);
   };
-  
-  const handleDeleteCate = (id) => {
-    // Xử lý xóa category
-    addSnack('success','Delete category success');
+
+  const handleDeleteCustomer = (id) => {
+    // Xử lý xóa Customer
+    console.log(`xóa cate thành công customer id ${id}`);
   };
 
   return (
-     <table className="w-full">
+    <div className=" rounded-lg w-full text-left bg-white border border-gray-200 ">
+      <table className="w-full">
         <thead className="font-medium text-sm text-gray-700 bg-[#F9F9FC]">
           <tr>
             {columns.map((column, colIndex) => {
@@ -52,7 +51,7 @@ export default function CategoryTable({ data, loading }) {
                 return (
                   <th
                     key={column.accessor}
-                    className="py-[18px] px-[22px] text-left max-w-[612px]"
+                    className="py-[18px] px-[22px] text-left max-w-[250px]"
                   >
                     <div className="flex justify-between">
                       <div className="flex items-center gap-2">
@@ -85,7 +84,7 @@ export default function CategoryTable({ data, loading }) {
                 >
                   <div className="flex justify-between">
                     {column.Header}
-                    {column.Header !== "Action" ? (
+                    {column.Header !== "Phone" && column.Header !== "Action" ? (
                       <HeaderIcon
                         item={<HiChevronDown />}
                         styling={"ml-2 size-4 "}
@@ -129,9 +128,14 @@ export default function CategoryTable({ data, loading }) {
                     <div className="flex items-center gap-2 w-3/4">
                       <div className="flex items-center">
                         <div className="ps-3">
-                          <Link to={`/admin/categories/${row.id}`} className="text-neutral-700">{row.name}</Link>
+                          <Link
+                            to={`/admin/customers/${row.id}`}
+                            className="text-neutral-700"
+                          >
+                            {row.name}
+                          </Link>
                           <div className="font-normal text-xs text-wrap">
-                            {row.description}
+                            {row.email}
                           </div>
                         </div>
                       </div>
@@ -140,12 +144,22 @@ export default function CategoryTable({ data, loading }) {
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
                   <div className="">
-                    <div className="text-neutral-700">15,020</div>
+                    <div className="text-neutral-700">{row.phone}</div>
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
                   <div className="">
-                    <div className="text-neutral-700">901</div>
+                    <div className="text-neutral-700">124</div>
+                  </div>
+                </td>
+                <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
+                  <div className="">
+                    <div className="text-neutral-700">$121.00</div>
+                  </div>
+                </td>
+                <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
+                  <div className="">
+                    <CustomerStatusIcon item={row.status} />
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
@@ -159,7 +173,7 @@ export default function CategoryTable({ data, loading }) {
                   <div className="flex justify-center items-center">
                     <div
                       onClick={() => {
-                        handleViewCate(row.id);
+                        handleViewCustomer(row.id);
                       }}
                     >
                       <HeaderIcon
@@ -169,7 +183,7 @@ export default function CategoryTable({ data, loading }) {
                     </div>
                     <div
                       onClick={() => {
-                        handleEditCate(row.id);
+                        handleEditCustomer(row.id);
                       }}
                     >
                       <HeaderIcon
@@ -179,7 +193,7 @@ export default function CategoryTable({ data, loading }) {
                     </div>
                     <div
                       onClick={() => {
-                        handleDeleteCate(row.id);
+                        handleDeleteCustomer(row.id);
                       }}
                     >
                       <HeaderIcon
@@ -194,6 +208,6 @@ export default function CategoryTable({ data, loading }) {
           </tbody>
         )}
       </table>
-
+    </div>
   );
 }

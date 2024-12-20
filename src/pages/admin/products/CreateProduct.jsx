@@ -93,6 +93,7 @@ export default function CreateProduct() {
   return (
     <>
       <div className="mx-6 my-8 ">
+        {/*  */}
         <div className="flex justify-between mb-6">
           <div>
             <BreadCrumb />
@@ -114,7 +115,6 @@ export default function CreateProduct() {
               color="bg-[#5C59E8]"
               text="text-white"
               border="border border-[#5C59E8]"
-              // size="min-w-[147px] max-w-[147px] min-h-10 max-h-10"
               type="submit"
               icon={<HiMiniPlus />}
               iconStyle="size-5"
@@ -125,8 +125,8 @@ export default function CreateProduct() {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 grid-rows-3 gap-5">
-          <div className="col-span-3 row-span-2.5">
+        <div className="grid grid-cols-4 gap-5">
+          <div className="col-span-3">
             {/* general information */}
             <div className="bg-white p-6 border border-neutral-100 rounded-lg mb-6">
               <div className="text-neutral-800 font-medium text-lg pb-[14px]">
@@ -244,7 +244,7 @@ export default function CreateProduct() {
             </div>
 
             {/* iventory */}
-            {/* <div className="bg-white p-6 border border-neutral-100 rounded-lg mb-6">
+            <div className="bg-white p-6 border border-neutral-100 rounded-lg mb-6">
               <div className="text-neutral-800 font-medium text-lg pb-[14px]">
                 Inventory
               </div>
@@ -255,8 +255,8 @@ export default function CreateProduct() {
                       size="w-full"
                       type="number"
                       min="0"
-                      placeholder="Type product quantity here. . ."
                       name="ProductQuantity"
+                      placeholder="Type product quantity here. . ."
                       updated={(_value) => {
                         setformData({
                           ...formData,
@@ -269,10 +269,11 @@ export default function CreateProduct() {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
 
-          <div className="col-span-1 row-span-2">
+          <div className="col-span-1">
+            {/* Category */}
             <div className="bg-white p-6 border border-neutral-100 rounded-lg mb-6">
               <div className="text-neutral-800 font-medium text-lg pb-[14px]">
                 Category
@@ -298,12 +299,13 @@ export default function CreateProduct() {
               </div>
             </div>
 
+            {/* Status */}
             <div className="bg-white p-6 border border-neutral-100 rounded-lg mb-6">
               <div className="flex justify-between">
                 <div className="text-neutral-800 font-medium text-lg pb-[14px]">
                   Status
                 </div>
-                <ProductStatus />
+                <ProductStatus item={formData.statusId} />
               </div>
               <div>
                 <div className="mb-3">
@@ -312,6 +314,7 @@ export default function CreateProduct() {
                       listData={listProductStatus}
                       loading={loadingCate}
                       placeholder="Select a status"
+                      searchPlaceholder="Enter status name..."
                       updated={(_value) => {
                       setformData({
                         ...formData,
@@ -328,8 +331,6 @@ export default function CreateProduct() {
           </div>
         </div>
       </div>
-
-      <ProductFooter />
     </>
   );
 }

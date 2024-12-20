@@ -28,7 +28,7 @@ export default function NormalDropdown({ ...props }) {
         </label>
       ) : null}
 
-      <div className="relative flex flex-col items-center ">
+      <div className=" flex flex-col items-center ">
         <div
           className="w-full h-10 mt-1 flex items-center justify-between rounded-lg bg-[#F9F9FC] border border-neutral-100 text-neutral-600 font-normal text-sm px-3 py-2 active:border-neutral-400 focus:outline-none"
           onClick={() => setIsOpen(!isOpen)}
@@ -47,7 +47,7 @@ export default function NormalDropdown({ ...props }) {
 
         {isOpen && (
           <ul className="alsolute w-full mt-1 flex flex-col items-start rounded-lg bg-[#F9F9FC] border border-neutral-100 text-neutral-600 font-normal text-sm">
-            <div className="flex items-center justify-between w-full h-10 px-3 sticky top-0 bg-[#F9F9FC] rounded-b-lg">
+            <div className="flex items-center justify-between w-full h-10 px-3 bg-[#F9F9FC] rounded-b-lg">
               <HeaderIcon item={<HiMiniMagnifyingGlass />} styling={`size-5`} />
               <input
                 type="text"

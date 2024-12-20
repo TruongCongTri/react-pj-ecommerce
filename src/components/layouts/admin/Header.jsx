@@ -77,9 +77,9 @@ export default function Header() {
 
           {listNoti.map((item) => {
             return item.isNoti ? (
-              <HeaderNoti key={item.id} item={item} styling={' size-6 m-2 '}/>
+              <HeaderNoti key={item.id} item={item} styling={`size-6`} />
             ) : (
-              <HeaderTool key={item.id} item={item} styling={' size-6 m-2 '}/>
+              <HeaderTool key={item.id} item={item} styling={`size-6`} />
             );
           })}
         </div>

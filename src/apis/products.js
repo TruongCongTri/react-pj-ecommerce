@@ -5,11 +5,13 @@ const products = {
     getData(currentPage, valuesPerPage) {
 		return axios({
 			method: 'get',
-			url: `${VITE_API_URL}/api/admin/products`,
+			// url: `${VITE_API_URL}/api/admin/products`,
+            url: `https://learning.sonthanh.net.vn/api/products`,
 			params: {
 				page: currentPage,
 				per_page: valuesPerPage,
 			},
+            
 		});
 	},
 

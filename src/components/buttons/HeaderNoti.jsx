@@ -6,28 +6,35 @@ import NotiDropdown from "./NotiDropdown";
 import HeaderIcon from "../icons/HeaderIcon";
 import RedQuantityCircle from "../icons/RedQuantityCircle";
 
-export default function HeaderNoti({ item = {} }) {
-  const { isOpen, openNoti } = useContext(NotiContext);
+export default function HeaderNoti({ item = {}, styling = {}}) {
+  const { isOpen, setIsOpen, closeNoti } = useContext(NotiContext);
 
   return (
     <>
       <div className="relative">
         <div
-          onClick={openNoti}
+          onClick={() => {
+            if (isOpen === `${item.name}`) {
+              setIsOpen(null);
+            } else {
+              setIsOpen(`${item.name}`);
+            }
+          }}
           className={`flex relative justify-center hover:text-indigo-200 cursor-pointer
-        ${isOpen ? " text-indigo-500 " : " text-neutral-500"}`}
+        ${
+          isOpen === `${item.name}` ? " text-indigo-500 " : " text-neutral-500"
+        }`}
         >
-          <HeaderIcon item={item.icon} styling={' size-6 m-2 '} />
-          <RedQuantityCircle item={item.notis} position={'absolute'} style={`object-right-top -mr-6 -mt-[9px]`} />
+          <HeaderIcon item={item.icon} styling={styling} />
+          <RedQuantityCircle
+            item={item.notis}
+            position={"absolute"}
+            style={`object-right-top -mr-6 -mt-[9px]`}
+          />
         </div>
 
-        <>
-        {item.isNoti ? (
-          <NotiDropdown />
-        ) : (<></>)}
-        </>
+        <>{item.isNoti ? <NotiDropdown item={item} /> : <></>}</>
       </div>
-
     </>
   );
 }

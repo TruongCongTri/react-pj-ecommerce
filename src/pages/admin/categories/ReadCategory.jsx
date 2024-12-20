@@ -72,8 +72,8 @@ export default function ReadCategory() {
           {loadingGet ? (
             <div>Loading data</div>
           ) : (
-            <div className="grid grid-cols-4 grid-rows-3 gap-5">
-              <div className="col-span-1 row-span-2">
+            <div className="grid grid-cols-4 gap-5">
+              <div className="col-span-1 ">
                 <div className="bg-white p-6 border border-neutral-100 rounded-lg">
                   <div className="text-neutral-800 font-medium text-lg pb-[14px]">
                     Thumbnail
@@ -97,7 +97,7 @@ export default function ReadCategory() {
                   </div>
                 </div>
               </div>
-              <div className="col-span-3 row-span-2.5">
+              <div className="col-span-3 ">
                 {/* general information */}
                 <div className="bg-white p-6 border border-neutral-100 rounded-lg">
                   <div className="text-neutral-800 font-medium text-lg pb-[14px]">

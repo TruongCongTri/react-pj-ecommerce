@@ -16,14 +16,15 @@ export default function NormalTextarea({ ...props }) {
         <label htmlFor={props.id} 
         className="text-neutral-600 font-medium text-sm"
         >
-          {props.children}
+          {props.children || null}
         </label>
       ) : (
         null
       )}
         <textarea 
+        ref={props.reference}
           type={props.type}
-          value={value}
+          value={value || ""}
           onChange={handleChange}
           placeholder={props.placeholder}
           name={props.name}

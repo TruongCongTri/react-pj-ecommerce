@@ -13,9 +13,6 @@ import LoadingTable from "./LoadingTable";
 import { Link, useNavigate } from "react-router-dom";
 import ProductStatusIcon from "../icons/ProductStatusIcon";
 
-// import Pagination from "../pagination/Pagination";
-// let PageSize = 15;
-
 import apis from "../../apis";
 
 export default function ProductTable({ data, loading }) {
@@ -59,18 +56,10 @@ export default function ProductTable({ data, loading }) {
       });
   };
 
-  // const [currentPage, setCurrentPage] = useState(1);
-
-  // const currentTableData = useMemo(() => {
-  //   const firstPageIndex = (currentPage - 1) * PageSize;
-  //   const lastPageIndex = firstPageIndex + PageSize;
-  //   return data.slice(firstPageIndex, lastPageIndex);
-  // }, [currentPage]);
-
   return (
-    <div className="relative rounded-lg w-full text-left bg-white border border-gray-200 ">
+    
       <table className="w-full">
-        <thead className="font-medium text-sm text-gray-700 uppercase bg-[#F9F9FC]">
+        <thead className="font-medium text-sm text-gray-700 bg-[#F9F9FC] ">
           <tr>
             {columns.map((column, colIndex) => {
               if (colIndex === 0) {
@@ -134,7 +123,7 @@ export default function ProductTable({ data, loading }) {
                 name={rowIndex}
                 className="cursor-pointer bg-white border-b border-neutral-50 hover:bg-gray-50 font-medium text-sm text-neutral-500"
               >
-                <td className="py-[18px] px-[22px] text-left  max-w-[250px]">
+                <td className="py-[18px] px-[22px] text-left max-w-[250px]">
                   <div className="flex items-center gap-2">
                     <input
                       id="checkbox-all-search"
@@ -179,7 +168,7 @@ export default function ProductTable({ data, loading }) {
                 </td> */}
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
                   <div className="">
-                    <div className="text-neutral-700">{row.category.name}</div>
+                    <div className="text-neutral-700">{row.category_id}</div>
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
@@ -196,13 +185,13 @@ export default function ProductTable({ data, loading }) {
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
                   <div className="">
-                    <ProductStatusIcon item={row.status} />
+                    <ProductStatusIcon item={row.status_id} />
                   </div>
                 </td>
                 <td className="py-[18px] px-[22px] text-left whitespace-nowrap">
                   <div className="">
                     <div className="text-neutral-700">
-                      {dateFormat(row.createdAt, "dd mmm yyyy")}
+                      {dateFormat(row.created_at, "dd mmm yyyy")}
                     </div>
                   </div>
                 </td>
@@ -241,18 +230,5 @@ export default function ProductTable({ data, loading }) {
           </tbody>
         )}
       </table>
-      {/* <nav
-        className="py-[18px] px-[22px] flex items-center justify-between px-6"
-        aria-label="Table navigation"
-      >
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={data.length}
-          pageSize={PageSize}
-          onPageChange={(page) => setCurrentPage(page)}
-        />
-      </nav> */}
-    </div>
   );
 }

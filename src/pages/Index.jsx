@@ -15,15 +15,18 @@ import EditProduct from "./admin/products/EditProduct";
 
 import OrdersDashboard from "./admin/orders/OrdersDashboard";
 
-import CustomersDashboard from "./admin/customers/CustomersDashboard";
+import DashboardCustomers from "./admin/customers/DashboardCustomers";
+import ReadCustomer from "./admin/customers/ReadCustomer";
+import CreateCustomer from "./admin/customers/CreateCustomer";
+import EditCustomer from "./admin/customers/EditCustomer";
 
 import SellerDashboard from "./admin/seller/SellerDashboard";
 
 import AnalyticsDashboard from "./admin/analytics/AnalyticsDashboard";
 
 import UserError from "./errors/UserError";
-
 export default function Index() {
+  
   return (
     <Routes>
       
@@ -42,19 +45,29 @@ export default function Index() {
           
         </Route>
 
-        <Route path="products">
+        {/* <Route path="products">
           <Route index element={<DashboardProducts />} breadcrumb="Products" />
           <Route path="add" element={<CreateProduct />}  breadcrumb="Add Product" />
           <Route path=":id" element={<ReadProduct />} breadcrumb="Product Detail"/>
           <Route path=":id/edit" element={<EditProduct />} breadcrumb="Edit Product"/>
-        </Route>
+        </Route> */}
+          <Route path="products" element={<DashboardProducts />} breadcrumb="Products" />
+          <Route path="products/add" element={<CreateProduct />}  breadcrumb="Add Product" />
+          <Route path="products/:id" element={<ReadProduct />} breadcrumb="Product Detail"/>
+          <Route path="products/:id/edit" element={<EditProduct />} breadcrumb="Edit Product"/>
+        
 
         <Route path="orders">
           <Route index element={<OrdersDashboard />} breadcrumb="we have orders"/>
         </Route>
+
         <Route path="customers">
-          <Route index element={<CustomersDashboard />} />
+          <Route index element={<DashboardCustomers />} breadcrumb="Customers" />
+          <Route path="add" element={<CreateCustomer />}  breadcrumb="Add Customer" />
+          <Route path=":id" element={<ReadCustomer />} breadcrumb="Customer Detail"/>
+          <Route path=":id/edit" element={<EditCustomer />} breadcrumb="Edit Customer"/>
         </Route>
+
         <Route path="seller">
           <Route index element={<SellerDashboard />} />
         </Route>

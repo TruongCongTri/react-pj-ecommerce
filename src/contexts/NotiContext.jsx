@@ -4,18 +4,20 @@ import { useLocation } from "react-router-dom";
 export const NotiContext = createContext();
 
 const NotiProvider = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(null);
 
-  const location = useLocation();
-  const openNoti = () => {
-    setIsOpen(!isOpen);
-  }   
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location]);
-
+  // const location = useLocation();
+  // const openNoti = () => {
+  //   setIsOpen(!isOpen);
+  // }   
+  // useEffect(() => {
+  //   setIsOpen(false);
+  // }, [location]);
+  const closeNoti = () => {
+    setIsOpen(null);
+  }
   return (
-    <NotiContext.Provider value={{ isOpen, setIsOpen, openNoti }}>
+    <NotiContext.Provider value={{ isOpen, setIsOpen, closeNoti }}>
       {children}
     </NotiContext.Provider>
   );

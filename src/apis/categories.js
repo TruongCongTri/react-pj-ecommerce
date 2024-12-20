@@ -2,20 +2,14 @@ import axios from "axios";
 const { VITE_API_URL } = import.meta.env;
 
 const categories = {
-    // getData(currentPage, valuesPerPage) {
-	// 	return axios({
-	// 		method: 'get',
-	// 		url: `${VITE_API_URL}/api/admin/categories`,
-	// 		params: {
-	// 			page: currentPage,
-	// 			per_page: valuesPerPage,
-	// 		},
-	// 	});
-	// },
-    getData() {
+    getData(currentPage, valuesPerPage) {
 		return axios({
 			method: 'get',
 			url: `${VITE_API_URL}/api/admin/categories`,
+			params: {
+				page: currentPage,
+				per_page: valuesPerPage,
+			},
 		});
 	},
     //path

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import { SnackBarContext } from '../../../contexts/SnackBarContext';
 
 import { HiMiniXMark } from "react-icons/hi2";
 import { HiMiniWrenchScrewdriver } from "react-icons/hi2";
@@ -18,6 +20,7 @@ export default function EditCategory() {
 
   const [formData, setformData] = useState({});
   const [loadingCreate, setLoadingCreate] = useState(false);
+  const {addSnack} = useContext(SnackBarContext);
 
   let navigate = useNavigate();
   useEffect(() => {
@@ -28,6 +31,7 @@ export default function EditCategory() {
         (res) => {
           const { category } = res.data.data;
           // xử lý categories nếu cần (Xử lý computed data)
+          category.image = category.image | '';
           setSingleData(category);
         },
         (err) => {
@@ -45,17 +49,30 @@ export default function EditCategory() {
   const params = useParams();
 
   const submit = () => {
+
+    if (!formData.name) {
+      addSnack('error', 'Category name is required!');
+      return
+    }
+
     apis.categories
       .update(params.id, formData)
       .then(
         (res) => {
           // thành công
-          navigate("/admin/categories");
+          addSnack('success','Update category success');
+          // navigate("/admin/categories");
+          navigate(-1);
         },
         (err) => {
+          addSnack('error',err.response.data.message || 'error');
           console.log(err);
         }
       )
+      .catch((err) => {
+        addSnack('error',JSON.stringify(err) || 'error');
+        console.log(err);
+      })
       .finally(() => {
         setLoadingCreate(false);
       });
@@ -71,7 +88,8 @@ export default function EditCategory() {
    */
 
   const handleCancel = () => {
-    navigate("/admin/categories");
+    // navigate("/admin/categories");
+    navigate(-1);
   };
 
   return (
@@ -110,8 +128,8 @@ export default function EditCategory() {
           {loadingGet ? (
             <div>Loading data</div>
           ) : (
-            <div className="grid grid-cols-4 grid-rows-3 gap-5">
-              <div className="col-span-1 row-span-2">
+            <div className="grid grid-cols-4 gap-5">
+              <div className="col-span-1">
                 <div className="bg-white p-6 border border-neutral-100 rounded-lg">
                   <div className="text-neutral-800 font-medium text-lg pb-[14px]">
                     Thumbnail
@@ -156,7 +174,7 @@ export default function EditCategory() {
                   </div>
                 </div>
               </div>
-              <div className="col-span-3 row-span-2.5">
+              <div className="col-span-3">
                 {/* general information */}
                 <div className="bg-white p-6 border border-neutral-100 rounded-lg">
                   <div className="text-neutral-800 font-medium text-lg pb-[14px]">

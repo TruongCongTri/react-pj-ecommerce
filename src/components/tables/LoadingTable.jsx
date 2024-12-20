@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function LoadingTable({ cols = 999, rows = 9 }) {
+export default function LoadingTable({ cols = 999, rows = 20 }) {
     return (
 		<tbody>
 			<tr>

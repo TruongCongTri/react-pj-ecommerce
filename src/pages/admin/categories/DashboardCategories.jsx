@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router";
+import ReactPaginate from "react-paginate";
 
 import BreadCrumb from "../../../components/layouts/BreadCrumb";
 import NormalButton from "../../../components/buttons/NormalButton";
-import SearchInput from "../../../components/forms/SearchInput";
+// import SearchInput from "../../../components/forms/SearchInput";
 import CategoryTable from "../../../components/tables/CategoryTable";
-
-// import { HiMiniArrowLeftStartOnRectangle } from "react-icons/hi2";
 
 import HeaderIcon from "../../../components/icons/HeaderIcon";
 import { PiExportBold } from "react-icons/pi";
@@ -17,33 +17,76 @@ import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import apis from "../../../apis";
 
 export default function CategoriesDashboard() {
-  // Lưu lại danh sách categories từ server
-  const [listData, setListData] = useState([]);
-  // Dùng để set state loading của table (first load hoặc searching)
-  const [loadingGet, setLoadingGet] = useState(false);
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
-
+  
+  //* btn
   const navigate = useNavigate();
   const handleAddCate = () => {
-    // Xử lý đăng nhập thành công
     navigate("/admin/categories/add");
   };
   const handleExportCate = () => {
     console.log("export cate");
   };
 
+  //*1: synsc params from url to filters
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filters, setFilters] = useState({
+    search: searchParams.get("search") || "",
+    page: searchParams.get("page") || 1,
+    perPage: searchParams.get("per_page") || 15,
+  });
+  // console.log(filters);
+
+  //*2: khởi tạo filters
+  const [currentPage, setCurrentPage] = useState();
+  const [searchValue, setSearchValue] = useState();
+  const [valuePerPage, setValuePerPage] = useState();
+
+  useEffect(() => {
+    setCurrentPage(filters.page);
+    setSearchValue(filters.search);
+    setValuePerPage(filters.perPage);
+  }, [filters]);
+
+  //*3: call api get list of data base on values from filters
+  // Lưu lại danh sách categories từ server
+  const [listData, setListData] = useState([]);
+  // Dùng để set state loading của table (first load hoặc searching)
+  const [loadingGet, setLoadingGet] = useState(false);
+  // pagination
+  const [totalPage, setTotalPage] = useState((1));
+  console.log(`init total page ${totalPage}`);
+
   // call api get list cate data
   useEffect(() => {
     setLoadingGet(true);
     apis.categories
-      .getData()
+      .getData(currentPage, valuePerPage)
       .then(
         (res) => {
           const { categories } = res.data.data;
+          const { pagination } = res.data.meta;
           // xử lý categories nếu cần (Xử lý computed data)
           setListData(categories);
+
+          setTotalPage((pagination.total_pages));
+          console.log(`total page ${pagination.total_pages}`);
+
+          // setTotalData(pagination.total);
+          // if (pagination.count == totalData) {
+          //   setFromData(1);
+          // } else if (currentPage < totalPage) {
+          //   setFromData(pagination.per_page * (currentPage - 1) + 1);
+          // } else {
+          //   setFromData(totalData - pagination.count + 1);
+          // }
+
+          // if (pagination.count == totalData) {
+          //   setToData(totalData);
+          // } else if (currentPage < totalPage) {
+          //   setToData(pagination.per_page * currentPage);
+          // } else {
+          //   setToData(totalData);
+          // }
         },
         (err) => {
           console.log(err);
@@ -55,20 +98,83 @@ export default function CategoriesDashboard() {
         }, 1000);
       });
     return () => {};
-  }, []);
+  }, [filters, currentPage]);
 
-  // xử lý search categories
+  //*5: sync filters value to URL
+  // update filters
+  const handleChangeFilters = (e) => {
+    const key = e.target.name || "page";
+    const value = e.target.value;
+    setFilters({ ...filters, [key]: value });
+    console.log("handle change filters");
+    console.log(filters);
+    console.log(`handle change filters - page index ${filters.page}`);
+  };
+
+  // sync filters value to URL
+  const handleSubmitSearchFilter = () => {
+    const params = new URLSearchParams();
+
+    params.set("search", filters.search);
+    params.set("page", filters.page);
+    params.set("per_page", filters.perPage);
+    setSearchParams(params, {
+      preventScrollReset: true,
+    });
+
+    console.log("handle submit search filters");
+    console.log(`handle submit search filters - page index ${filters.page}`);
+  };
+  // whenever filters is updated
+  useEffect(() => {
+    handleSubmitSearchFilter();
+  }, [filters]);
+
+  //*6: handle pagination
+  // xử lý chuyển trang
+  const handlePageClick = (data) => {
+    console.log("handle click page");
+    console.log(`clicked page index ${data.selected + 1}`);
+
+    const key = "page";
+    const value = data.selected + 1;
+    setFilters({ ...filters, [key]: value });
+
+    // const params = new URLSearchParams();
+
+    // params.set("search", filters.search);
+    // params.set("page", filters.page);
+    // params.set("per_page", filters.perPage);
+    // setSearchParams(params, {
+    //   preventScrollReset: true,
+    // });
+  };
+
+  //*7: update listData based on search value
+  // Dùng để lọc dữ liệu theo search params
+  const [filteredData, setFilteredData] = useState([]);
+
+  // being called whenever listData or filters is updated
   useEffect(() => {
     const filtered = listData;
     setFilteredData(filtered);
-  }, [listData]);
 
-  useEffect(() => {
-    const filtered = listData.filter((o) =>
-      o.name.trim().toLowerCase().includes(searchQuery.trim().toLowerCase())
+    setFilteredData(
+      listData.filter((o) =>
+        o.name
+          .trim()
+          .toLowerCase()
+          .includes(filters.search.trim().toLowerCase())
+      )
     );
-    setFilteredData(filtered);
-  }, [searchQuery]);
+    // setCurrentPage(filters.page);
+    // console.log(currentPage);
+  }, [listData, filters, currentPage]);
+
+  // calculate from and to data of each page
+  // const [totalData, setTotalData] = useState(0);
+  // const [fromData, setFromData] = useState(0);
+  // const [toData, setToData] = useState(0);
 
   return (
     <div className="mx-6 my-8 ">
@@ -123,12 +229,22 @@ export default function CategoriesDashboard() {
             />
             <input
               type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleChangeFilters}
               placeholder="Search category. . ."
-              name="categorySearch"
+              name="search"
+              value={filters.search}
               className={`text-neutral-400 font-normal text-sm placeholder:text-neutral-400 w-full focus:outline-none`}
             />
+            <button
+              type="submit"
+              className="text-white "
+              // onClick={handleSubmitSearchFilter}
+            >
+              <HeaderIcon
+                item={<HiMiniMagnifyingGlass />}
+                styling={`mr-1 size-5 text-neutral-500`}
+              />
+            </button>
           </div>
         </div>
 
@@ -144,8 +260,42 @@ export default function CategoriesDashboard() {
           Filters
         </NormalButton>
       </div>
-      <div>
+      <div className="rounded-lg w-full text-left bg-white border">
         <CategoryTable data={filteredData} loading={loadingGet}></CategoryTable>
+        <div className="flex justify-between items-center px-6 py-4">
+          <div>
+            <p className="text-sm text-gray-700">
+              Showing
+              {/* <span className="font-medium"> {fromData} </span>
+              to
+              <span className="font-medium"> {toData} </span>
+              of
+              <span className="font-medium"> {totalData} </span> */}
+              results
+            </p>
+          </div>
+          <div className="font-semibold text-base">
+            <ReactPaginate
+              previousLabel={"previous"}
+              nextLabel={"next"}
+              breakLabel={"..."}
+              pageCount={totalPage}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={3}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination justify-content-center"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextClassName={"page-item"}
+              nextLinkClassName={"page-link"}
+              breakClassName={"page-item"}
+              breakLinkClassName={"page-link"}
+              activeClassName={"active"}
+            />
+          </div>
+        </div>
       </div>
       <div></div>
     </div>
