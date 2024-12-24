@@ -31,6 +31,7 @@ export default function NormalDropdown({ ...props }) {
       <div className=" flex flex-col items-center ">
         <div
           className="w-full h-10 mt-1 flex items-center justify-between rounded-lg bg-[#F9F9FC] border border-neutral-100 text-neutral-600 font-normal text-sm px-3 py-2 active:border-neutral-400 focus:outline-none"
+          ref={props.reference} 
           onClick={() => setIsOpen(!isOpen)}
         >
           {selected?.id

@@ -69,7 +69,7 @@ export default function ProductsDashboard() {
       .then(
         (res) => {
           const { products } = res.data.data;
-          const { pagination } = res.data.data.meta;
+          const { pagination } = res.data.meta;
           // xử lý products nếu cần (Xử lý computed data)
           setListData(products);
           setTotalPage(pagination.total_pages);

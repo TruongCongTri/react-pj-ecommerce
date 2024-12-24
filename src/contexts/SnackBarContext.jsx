@@ -49,7 +49,7 @@ const SnackBarProvider = ({ children }) => {
     setSnacks([
       ...snacks,
       {
-        id: new Date().getTime(),
+        id: new Date().getTime() + new Date().getSeconds(),
         type: status,
         content,
       },
@@ -61,8 +61,7 @@ const SnackBarProvider = ({ children }) => {
     setSnacks(rslt);
   };
   return (
-    <SnackBarContext.Provider 
-    value={{ snacks, addSnack, removeSnack }}>
+    <SnackBarContext.Provider value={{ snacks, addSnack, removeSnack }}>
       {children}
     </SnackBarContext.Provider>
   );

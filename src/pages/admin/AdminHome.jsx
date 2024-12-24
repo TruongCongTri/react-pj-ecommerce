@@ -16,8 +16,7 @@ import TotalSales from "../../components/statistic/TotalSales";
 import TotalRevenue from "../../components/statistic/TotalRevenue";
 
 export default function ReadCustomer() {
-  // Lưu lại danh sách categories từ server
-  const [singleData, setSingleData] = useState([]);
+  
   // Dùng để set state loading của table (first load hoặc searching)
   const [loadingGet, setLoadingGet] = useState(false);
 
@@ -45,7 +44,7 @@ export default function ReadCustomer() {
     console.log("export Customer");
   };
 
-  console.log(singleData);
+
 
   return (
     <>

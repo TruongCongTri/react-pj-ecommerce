@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+
 import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router";
 import ReactPaginate from "react-paginate";
@@ -17,7 +21,6 @@ import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import apis from "../../../apis";
 
 export default function CategoriesDashboard() {
-  
   //* btn
   const navigate = useNavigate();
   const handleAddCate = () => {
@@ -34,18 +37,17 @@ export default function CategoriesDashboard() {
     page: searchParams.get("page") || 1,
     perPage: searchParams.get("per_page") || 15,
   });
-  // console.log(filters);
 
   //*2: khởi tạo filters
-  const [currentPage, setCurrentPage] = useState();
-  const [searchValue, setSearchValue] = useState();
-  const [valuePerPage, setValuePerPage] = useState();
+  // const [currentPage, setCurrentPage] = useState();
+  // const [searchValue, setSearchValue] = useState();
+  // const [valuePerPage, setValuePerPage] = useState();
 
-  useEffect(() => {
-    setCurrentPage(filters.page);
-    setSearchValue(filters.search);
-    setValuePerPage(filters.perPage);
-  }, [filters]);
+  // useEffect(() => {
+  //   setCurrentPage(filters.page);
+  //   setSearchValue(filters.search);
+  //   setValuePerPage(filters.perPage);
+  // }, [filters]);
 
   //*3: call api get list of data base on values from filters
   // Lưu lại danh sách categories từ server
@@ -53,40 +55,25 @@ export default function CategoriesDashboard() {
   // Dùng để set state loading của table (first load hoặc searching)
   const [loadingGet, setLoadingGet] = useState(false);
   // pagination
-  const [totalPage, setTotalPage] = useState((1));
+  const [totalPage, setTotalPage] = useState(null);
   console.log(`init total page ${totalPage}`);
 
   // call api get list cate data
   useEffect(() => {
     setLoadingGet(true);
+    console.log(`current page: ${filters.page}`);
+    console.log(`per page: ${filters.perPage}`);
+    console.log();
+  
     apis.categories
-      .getData(currentPage, valuePerPage)
+      .getData(filters.page, filters.perPage)
       .then(
         (res) => {
           const { categories } = res.data.data;
           const { pagination } = res.data.meta;
           // xử lý categories nếu cần (Xử lý computed data)
           setListData(categories);
-
-          setTotalPage((pagination.total_pages));
-          console.log(`total page ${pagination.total_pages}`);
-
-          // setTotalData(pagination.total);
-          // if (pagination.count == totalData) {
-          //   setFromData(1);
-          // } else if (currentPage < totalPage) {
-          //   setFromData(pagination.per_page * (currentPage - 1) + 1);
-          // } else {
-          //   setFromData(totalData - pagination.count + 1);
-          // }
-
-          // if (pagination.count == totalData) {
-          //   setToData(totalData);
-          // } else if (currentPage < totalPage) {
-          //   setToData(pagination.per_page * currentPage);
-          // } else {
-          //   setToData(totalData);
-          // }
+          setTotalPage(pagination.total_pages);
         },
         (err) => {
           console.log(err);
@@ -98,7 +85,7 @@ export default function CategoriesDashboard() {
         }, 1000);
       });
     return () => {};
-  }, [filters, currentPage]);
+  }, [filters]);
 
   //*5: sync filters value to URL
   // update filters
@@ -132,23 +119,23 @@ export default function CategoriesDashboard() {
 
   //*6: handle pagination
   // xử lý chuyển trang
-  const handlePageClick = (data) => {
+  const handlePageClick = (event, value) => {
     console.log("handle click page");
-    console.log(`clicked page index ${data.selected + 1}`);
+    console.log(`clicked page index ${value}`);
+    console.log(`set current page ${filters.page}`);
 
     const key = "page";
-    const value = data.selected + 1;
-    setFilters({ ...filters, [key]: value });
-
-    // const params = new URLSearchParams();
-
-    // params.set("search", filters.search);
-    // params.set("page", filters.page);
-    // params.set("per_page", filters.perPage);
-    // setSearchParams(params, {
-    //   preventScrollReset: true,
-    // });
+    const dataValue = value;
+    setFilters({ ...filters, [key]: dataValue });
   };
+  // const handlePageClick = (data) => {
+  //   console.log("handle click page");
+  //   console.log(`clicked page index ${data.selected + 1}`);
+
+  //   const key = "page";
+  //   const value = data.selected + 1;
+  //   setFilters({ ...filters, [key]: value });
+  // };
 
   //*7: update listData based on search value
   // Dùng để lọc dữ liệu theo search params
@@ -169,7 +156,7 @@ export default function CategoriesDashboard() {
     );
     // setCurrentPage(filters.page);
     // console.log(currentPage);
-  }, [listData, filters, currentPage]);
+  }, [listData, filters]);
 
   // calculate from and to data of each page
   // const [totalData, setTotalData] = useState(0);
@@ -260,7 +247,9 @@ export default function CategoriesDashboard() {
           Filters
         </NormalButton>
       </div>
-      <div className="rounded-lg w-full text-left bg-white border">
+
+      {loadingGet ? null : (
+        <div className="rounded-lg w-full text-left bg-white border">
         <CategoryTable data={filteredData} loading={loadingGet}></CategoryTable>
         <div className="flex justify-between items-center px-6 py-4">
           <div>
@@ -275,7 +264,7 @@ export default function CategoriesDashboard() {
             </p>
           </div>
           <div className="font-semibold text-base">
-            <ReactPaginate
+            {/* <ReactPaginate
               previousLabel={"previous"}
               nextLabel={"next"}
               breakLabel={"..."}
@@ -293,11 +282,14 @@ export default function CategoriesDashboard() {
               breakClassName={"page-item"}
               breakLinkClassName={"page-link"}
               activeClassName={"active"}
-            />
+            /> */}
+            <Stack>
+              <Pagination count={totalPage} onChange={handlePageClick} />
+            </Stack>
           </div>
         </div>
       </div>
-      <div></div>
+      )}
     </div>
   );
 }

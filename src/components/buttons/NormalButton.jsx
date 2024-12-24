@@ -11,7 +11,7 @@ export default function NormalButton({ ...props }) {
   return (
     <button
       onClick={props.onClick}
-      className={`flex justify-center gap-1 items-center rounded-lg py-[10px] px-[14px] font-semibold text-sm 
+      className={`flex justify-center gap-1 items-center rounded-lg px-[14px] py-[10px] font-semibold text-sm 
       ${props.color} ${props.text} ${props.border} ${isDisabled ? 'opacity-50':''}`}
       type={props.type}
       disabled={props.loading || props.isDisabled}

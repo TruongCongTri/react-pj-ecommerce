@@ -2,11 +2,10 @@ import React, { useState, useEffect, useReducer } from "react";
 import { useSearchParams } from "react-router";
 import ReactPaginate from "react-paginate";
 import apis from "../../../apis";
-import {reducer, initialState} from "../../../reducers/snackBarReducer";
+import { reducer, initialState } from "../../../reducers/snackBarReducer";
 
 export default function EditCustomer() {
   const [counterState, dispatch] = useReducer(reducer, initialState);
-
 
   //*1: synsc params from url to filters
   const [searchParams, setSearchParams] = useSearchParams();
@@ -52,23 +51,24 @@ export default function EditCustomer() {
   };
 
   // sync filters value to URL
-    const handleSubmitSearchFilter = () => {
-      const params = new URLSearchParams();
-  
-      params.set("page", filters.page);
-      params.set("per_page", filters.perPage);
-      setSearchParams(params, {
-        preventScrollReset: true,
-      });};
-    // whenever filters is updated
-    useEffect(() => {
-      handleSubmitSearchFilter();
-    }, [filters]);
+  const handleSubmitSearchFilter = () => {
+    const params = new URLSearchParams();
+
+    params.set("page", filters.page);
+    params.set("per_page", filters.perPage);
+    setSearchParams(params, {
+      preventScrollReset: true,
+    });
+  };
+  // whenever filters is updated
+  useEffect(() => {
+    handleSubmitSearchFilter();
+  }, [filters]);
 
   const handlePageClick = (data) => {
     console.log(data.selected);
 
-    setFilters({ ...filters, "page": data.selected + 1 });
+    setFilters({ ...filters, page: data.selected + 1 });
   };
 
   return (
@@ -95,13 +95,18 @@ export default function EditCustomer() {
         activeClassName={"active"}
       />
 
-
       <div>
         Reducer:
         <p>Count: {counterState.count}</p>
-      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
-      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
-      <button onClick={() => dispatch({ type: 'reset', payload: 0 })}>Reset</button>
+        <button onClick={() => dispatch({ type: "increment" })}>
+          Increment
+        </button>
+        <button onClick={() => dispatch({ type: "decrement" })}>
+          Decrement
+        </button>
+        <button onClick={() => dispatch({ type: "reset", payload: 0 })}>
+          Reset
+        </button>
       </div>
     </>
   );

@@ -10,9 +10,30 @@ import { HiMiniXMark } from "react-icons/hi2";
 
 import apis from "../../../apis";
 
-import FileUploader from "../../../components/forms/FileUploader";
 import NormalInput from "../../../components/forms/NormalInput";
 import NormalTextarea from "../../../components/forms/NormalTextarea";
+
+// validate client input data
+// (Formik + Yup|Joi) | (Formix) | (Yup)
+
+/**
+ * Description
+ *
+ * YUP schema đặt điều kiện cho formData.
+ * Phải nhập name, desc, image;
+ *  desc phải ít hơn 255 ký tự,
+ *  image phải là một đường dẫn url
+ *
+ */
+const userSchema = object({
+  name: string().required("Name không được để trống"),
+  description: string()
+    .required("Description không được để trống")
+    .max(255, "Description phải ít hơn 255 ký tự"),
+  image: string()
+    .required("Image không được để trống")
+    .url("Image phải là đường dẫn"),
+});
 
 export default function CreateCategory() {
   const [formData, setformData] = useState({});
@@ -24,6 +45,13 @@ export default function CreateCategory() {
   //1. useRef: ghi nhớ 1 state mà không bị update theo re-render
   const isSubmit = useRef(false);
   //2. useRef: ghi nhớ 1 jsx element
+
+  /**
+   * Description:
+   *
+   * Thông báo tại ô name input, viền đỏ khi kiểm tra có lỗi nhập liệu
+   *
+   */
   const nameInput = useRef(null);
   const descInput = useRef(null);
   const imageInput = useRef(null);
@@ -35,28 +63,16 @@ export default function CreateCategory() {
     //set useRef flag when submit button is clicked
     isSubmit.current = true;
 
-    // validate client input data
-    // (Formik + Yup|Joi) | (Formix) | (Yup)
-    const userSchema = object({
-      name: string().required("Name không được để trống"),
-      description: string().required("Description không được để trống").max(255, "Description phải ít hơn 255 ký tự"),
-      image: string().required("Image không được để trống").url("Image phải là đường link"),
-    });
-    // const errors = userSchema.validate(formData);
-
     userSchema
-      .validate(formData)
+      .validate(formData, { abortEarly: false })
       .then(function (value) {
         console.log(value); // returns person object
-        nameInput.current.classList.remove("border-red-500");
-        descInput.current.classList.remove("border-red-500");
-        imageInput.current.classList.remove("border-red-500");
         apis.categories
           .create(formData)
           .then(
             (res) => {
               // thành công
-              addSnack("success", "Create category success");
+              addSnack("success", "Tạo mới Category thành công");
               // navigate("/admin/categories");
               navigate(-1);
             },
@@ -71,53 +87,34 @@ export default function CreateCategory() {
           });
       })
       .catch(function (err) {
-        console.log(err.message);
-        addSnack("error", err.message);
-        setErrorsForm({
-          name: "Name không được để trống",
-          description: "Description không được để trống",
-          image: "Image phải là link",
+        const errObj = {};
+        err.inner.map((o) => {
+          addSnack("error", "Tạo mới Category thất bại");
+          errObj[o.path] = o.message;
         });
-        
-        // setTimeout(() => {
-        //   setLoadingCreate(false);
-        // }, 1000);
+        console.log(errObj);
+
+        setErrorsForm(errObj);
+        if ("name" in errObj) {
+          nameInput.current.classList.add("border-red-500");
+        } else {
+          nameInput.current.classList.remove("border-red-500");
+        }
+        if ("description" in errObj) {
+          descInput.current.classList.add("border-red-500");
+        } else {
+          descInput.current.classList.remove("border-red-500");
+        }
+        if ("image" in errObj) {
+          imageInput.current.classList.add("border-red-500");
+        } else {
+          imageInput.current.classList.remove("border-red-500");
+        }
       })
       .finally(() => {
-        setTimeout(() => {
-          setLoadingCreate(false);
-        }, 1000);
-      });;
-
-    // if (userSchema.validate(formData)) {
-    //   addSnack("error", "Category name is required!");
-    //   setErrorsForm({
-    //     name: "Name không được để trống",
-    //     description: "Description không được để trống",
-    //     image: "Image phải là link",
-    //   });
-    //   nameInput.current.classList.add("border-red-500");
-    //   nameInput.current.focus();
-    //   descInput.current.classList.add("border-red-500");
-    //   descInput.current.focus();
-    //   imageInput.current.classList.add("border-red-500");
-    //   imageInput.current.focus();
-    //   setTimeout(() => {
-    //     setLoadingCreate(false);
-    //   }, 1000);
-    //   return;
-    // }
-    // if (!formData.name) {
-    //   addSnack('error', 'Category name is required!');
-    //   setErrorsForm({
-    //     name: "Name cannot be empty",})
-    //   nameInput.current.classList.add("border-red-500");
-    //   nameInput.current.focus();
-    //   setTimeout(() => {
-    //     setLoadingCreate(false);
-    //   }, 1000);
-    //   return;
-    // }
+        setLoadingCreate(false);
+        isSubmit.current = true;
+      });
   };
 
   /**
@@ -128,7 +125,6 @@ export default function CreateCategory() {
    * @param {string} img
    * @returns {void}
    */
-
   const handleCancel = () => {
     // navigate("/admin/categories");
     navigate(-1);
@@ -136,6 +132,7 @@ export default function CreateCategory() {
 
   return (
     <div className="mx-6 my-8 ">
+      {/* btn */}
       <div className="flex justify-between mb-6">
         <div>
           <BreadCrumb />
@@ -168,7 +165,7 @@ export default function CreateCategory() {
           </NormalButton>
         </div>
       </div>
-
+      {/* data layout */}
       <div className="grid grid-cols-4 gap-5">
         <div className="col-span-1 ">
           <div className="bg-white p-6 border border-neutral-100 rounded-lg">
@@ -217,13 +214,14 @@ export default function CreateCategory() {
               General Information
             </div>
             <div>
+              <div className="mb-3"></div>
               <div className="mb-3">
                 <NormalInput
                   reference={nameInput}
                   size="w-full"
                   type="text"
                   placeholder="Type category name here. . ."
-                  name="Category Name"
+                  name="CategoryName"
                   updated={(_value) => {
                     setformData({
                       ...formData,
