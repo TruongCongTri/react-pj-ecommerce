@@ -2,10 +2,11 @@ import React, { useState, useContext, useRef } from "react";
 import NormalInput from "../../components/forms/NormalInput";
 import NormalButton from "../../components/buttons/NormalButton";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { SnackBarContext } from "../../contexts/SnackBarContext";
 import apis from "../../apis";
+import { AuthenticateContext } from "../../contexts/AuthenticateContext";
 
 // const usernameSchema = yup.string()
 //   .required('Vui lòng nhập username')
@@ -50,6 +51,8 @@ const signupSchema = yup.object({
 });
 
 export default function Register() {
+ const { isAuthenticate } = useContext(AuthenticateContext);
+   
   const [formData, setformData] = useState({});
   const [errorsForm, setErrorsForm] = useState({});
   const [loadingPost, setLoadingPost] = useState(false);
@@ -158,6 +161,9 @@ export default function Register() {
       });
   };
 
+  if (isAuthenticate) {
+    return <Navigate to='/admin'> </Navigate>
+  }
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center justify-center px-6 py-8 m-auto">

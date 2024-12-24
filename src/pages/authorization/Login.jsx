@@ -120,35 +120,7 @@ export default function Login() {
   if (isAuthenticate) {
     return <Navigate to='/admin'> </Navigate>
   }
-  // const fakeLogin = () => {
-  //   apis.authorization
-  //     .login({
-  //       email: "admin.global@gmail.com",
-  //       password: "123456",
-  //     })
-  //     .then(
-  //       (result) => {
-  //         console.log(result.data.data.user);
-  //         localStorage.setItem("user", JSON.stringify(result.data.data.user));
-  //         localStorage.setItem(
-  //           "role",
-  //           JSON.stringify(result.data.data.user.role)
-  //         );
-  //         localStorage.setItem(
-  //           "token",
-  //           JSON.stringify(result.data.data.user.token)
-  //         );
-  //       },
-  //       (err) => {
-  //         console.log(err);
-  //       }
-  //     )
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   // localStorage.setItem('token', 'something');
-  //   // navigate("/admin");
-  // };
+
 
   return (
     <section className="bg-gray-50">
