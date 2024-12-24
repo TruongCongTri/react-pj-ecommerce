@@ -48,7 +48,9 @@ export default function CreateCategory() {
       .validate(formData)
       .then(function (value) {
         console.log(value); // returns person object
-
+        nameInput.current.classList.remove("border-red-500");
+        descInput.current.classList.remove("border-red-500");
+        imageInput.current.classList.remove("border-red-500");
         apis.categories
           .create(formData)
           .then(
@@ -67,7 +69,6 @@ export default function CreateCategory() {
             addSnack("error", JSON.stringify(err) || "error");
             console.log(err);
           });
-          
       })
       .catch(function (err) {
         console.log(err.message);
@@ -77,12 +78,7 @@ export default function CreateCategory() {
           description: "Description không được để trống",
           image: "Image phải là link",
         });
-        nameInput.current.classList.add("border-red-500");
-        nameInput.current.focus();
-        descInput.current.classList.add("border-red-500");
-        descInput.current.focus();
-        imageInput.current.classList.add("border-red-500");
-        imageInput.current.focus();
+        
         // setTimeout(() => {
         //   setLoadingCreate(false);
         // }, 1000);
@@ -93,6 +89,35 @@ export default function CreateCategory() {
         }, 1000);
       });;
 
+    // if (userSchema.validate(formData)) {
+    //   addSnack("error", "Category name is required!");
+    //   setErrorsForm({
+    //     name: "Name không được để trống",
+    //     description: "Description không được để trống",
+    //     image: "Image phải là link",
+    //   });
+    //   nameInput.current.classList.add("border-red-500");
+    //   nameInput.current.focus();
+    //   descInput.current.classList.add("border-red-500");
+    //   descInput.current.focus();
+    //   imageInput.current.classList.add("border-red-500");
+    //   imageInput.current.focus();
+    //   setTimeout(() => {
+    //     setLoadingCreate(false);
+    //   }, 1000);
+    //   return;
+    // }
+    // if (!formData.name) {
+    //   addSnack('error', 'Category name is required!');
+    //   setErrorsForm({
+    //     name: "Name cannot be empty",})
+    //   nameInput.current.classList.add("border-red-500");
+    //   nameInput.current.focus();
+    //   setTimeout(() => {
+    //     setLoadingCreate(false);
+    //   }, 1000);
+    //   return;
+    // }
   };
 
   /**
